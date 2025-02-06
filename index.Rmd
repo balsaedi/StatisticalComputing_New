@@ -1,6 +1,6 @@
 --- 
 title: "Statistical Computing"
-author: "Basim Alsaedi"
+author: "Dr. Basim Alsaedi"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---

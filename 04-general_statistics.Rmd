@@ -1,6 +1,5 @@
 # General Statistics
   
-In this course, we will require the ecommerce data set that can be downloaded from [here](https://www.kaggle.com/datasets/shrishtimanja/ecommerce-dataset-for-data-analysis/data). 
 
 
 ---

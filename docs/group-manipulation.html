@@ -615,7 +615,7 @@ It’s like your helper asking every customer for two values and summing them up
 <span id="cb252-8"><a href="group-manipulation.html#cb252-8" tabindex="-1"></a></span>
 <span id="cb252-9"><a href="group-manipulation.html#cb252-9" tabindex="-1"></a><span class="co"># View the respaed data </span></span>
 <span id="cb252-10"><a href="group-manipulation.html#cb252-10" tabindex="-1"></a><span class="fu">head</span>(mtcars_long)</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 10
+<pre><code>## # A tibble: 6 × 10
 ##     cyl  disp  drat  qsec    vs    am  gear  carb variable  value
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
 ## 1     6   160   3.9  16.5     0     1     4     4 mpg       21   
@@ -639,7 +639,7 @@ It’s like your helper asking every customer for two values and summing them up
 <span id="cb254-4"><a href="group-manipulation.html#cb254-4" tabindex="-1"></a></span>
 <span id="cb254-5"><a href="group-manipulation.html#cb254-5" tabindex="-1"></a><span class="co"># View the reshaped data</span></span>
 <span id="cb254-6"><a href="group-manipulation.html#cb254-6" tabindex="-1"></a><span class="fu">head</span>(mtcars_wide)</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 11
+<pre><code>## # A tibble: 6 × 11
 ##     cyl  disp  drat  qsec    vs    am  gear  carb   mpg    hp    wt
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     6   160  3.9   16.5     0     1     4     4  21     110  2.62
@@ -673,7 +673,7 @@ It’s like your helper asking every customer for two values and summing them up
 <span id="cb256-11"><a href="group-manipulation.html#cb256-11" tabindex="-1"></a></span>
 <span id="cb256-12"><a href="group-manipulation.html#cb256-12" tabindex="-1"></a><span class="co"># View the reshaped data</span></span>
 <span id="cb256-13"><a href="group-manipulation.html#cb256-13" tabindex="-1"></a><span class="fu">head</span>(iris_long)</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 5
+<pre><code>## # A tibble: 6 × 5
 ##   Petal.Length Petal.Width Species feature      measurement
 ##          &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;   &lt;chr&gt;              &lt;dbl&gt;
 ## 1          1.4         0.2 setosa  Sepal.Length         5.1
@@ -689,7 +689,7 @@ It’s like your helper asking every customer for two values and summing them up
 <span id="cb258-4"><a href="group-manipulation.html#cb258-4" tabindex="-1"></a></span>
 <span id="cb258-5"><a href="group-manipulation.html#cb258-5" tabindex="-1"></a><span class="co"># View the reshaped data</span></span>
 <span id="cb258-6"><a href="group-manipulation.html#cb258-6" tabindex="-1"></a><span class="fu">head</span>(iris_wide)</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 5
+<pre><code>## # A tibble: 6 × 5
 ##   Petal.Length Petal.Width Species Sepal.Length Sepal.Width
 ##          &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;   &lt;list&gt;       &lt;list&gt;     
 ## 1          1.4         0.2 setosa  &lt;dbl [8]&gt;    &lt;dbl [8]&gt;  
@@ -815,7 +815,7 @@ It’s like your helper asking every customer for two values and summing them up
 <span id="cb274-3"><a href="group-manipulation.html#cb274-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>( <span class="at">cols =</span> <span class="st">&quot;brand&quot;</span>)</span>
 <span id="cb274-4"><a href="group-manipulation.html#cb274-4" tabindex="-1"></a></span>
 <span id="cb274-5"><a href="group-manipulation.html#cb274-5" tabindex="-1"></a><span class="fu">head</span>(brand_df_long)</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 3
+<pre><code>## # A tibble: 6 × 3
 ##   sales name  value 
 ##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; 
 ## 1    40 brand BrandA

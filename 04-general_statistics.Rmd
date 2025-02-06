@@ -1037,7 +1037,7 @@ t.test(before_caffeine, after_caffeine, paired = TRUE)
 
 ---
   
-## 4.7 Testing a Sample Proportion and its Confidence Interval
+## Testing a Sample Proportion and its Confidence Interval
 
 A **proportion test** is used when we want to **make inferences about categorical data**. This test helps us:
   
@@ -1254,6 +1254,678 @@ prop.test(c(85, 75), c(150, 130), correct = FALSE)
 
 
 ---
+##  Comparing the Means of Two Samples
+  
+Comparing the means of two independent samples is essential in determining if there is a significant difference between two groups. 
+
+---
+  
+### Understanding Two-Sample t-Test
+  The **two-sample t-test** checks whether the means of two independent groups are significantly different.
+
+**Hypotheses:**
+  
+- **Null Hypothesis (\(H_0\))**: The two group means are equal.
+
+- **Alternative Hypothesis (\(H_A\))**: The two group means are different.
+
+
+\[
+  t = \frac{\bar{x_1} - \bar{x_2}}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}
+  \]
+
+Where:
+  
+- \( \bar{x_1}, \bar{x_2} \) = Sample means
+
+- \( s_1, s_2 \) = Standard deviations
+
+- \( n_1, n_2 \) = Sample sizes
 
 
 ---
+
+  
+### Independent (Unpaired) t-Test
+  
+This test is used when the two samples are **independent**.
+
+
+#### Example: Comparing Heights of Males and Females
+
+```{r}
+# Sample data
+male_heights <- c(170, 175, 180, 185, 190, 195)
+female_heights <- c(160, 165, 168, 170, 175, 178)
+
+# Perform independent t-test
+t.test(male_heights, female_heights)
+```
+
+- If **p-value < 0.05**, reject \(H_0\) → The two means are significantly different.
+
+- If **p-value > 0.05**, fail to reject \(H_0\) → No significant difference.
+
+
+---
+  
+### Checking Assumptions
+  
+Before running a t-test, we must check:
+  
+1. **Normality** (Use Shapiro-Wilk test)
+
+2. **Equal Variances** (Use F-test)
+
+
+#### Example: Checking Normality
+
+```{r}
+shapiro.test(male_heights)
+shapiro.test(female_heights)
+```
+
+#### Example: Checking Equal Variances
+
+```{r}
+var.test(male_heights, female_heights)
+```
+
+- If **p-value < 0.05**, variances are **not equal** → Use `var.equal = FALSE` in `t.test()`.
+
+
+- If **p-value > 0.05**, variances are **equal** → Use `var.equal = TRUE`.
+
+---
+  
+### Performing t-Test with Unequal Variances
+  
+#### Example: When Variances are Unequal
+  
+```{r}
+t.test(male_heights, female_heights, var.equal = FALSE)
+```
+
+#### Example: When Variances are Equal
+
+```{r}
+t.test(male_heights, female_heights, var.equal = TRUE)
+```
+
+---
+  
+  
+### Paired t-Test (Dependent Samples)
+  
+A **paired t-test** is used when **the same subjects are measured twice** (e.g., before and after treatment).
+
+#### Example: Testing Before vs. After Training Scores
+
+```{r}
+# Scores before and after training
+before <- c(60, 65, 70, 75, 80, 85, 90)
+after  <- c(65, 68, 75, 78, 85, 88, 92)
+
+# Perform paired t-test
+t.test(before, after, paired = TRUE)
+```
+
+
+
+---
+
+
+
+
+  
+### Visualizing Group Differences
+  
+#### Example: Boxplot Comparing Two Groups
+  
+```{r}
+# Combine data into a dataframe
+data <- data.frame(
+  Height = c(male_heights, female_heights),
+  Gender = rep(c("Male", "Female"), each = 6)
+)
+
+# Plot boxplot
+boxplot(Height ~ Gender, data = data, col = c("blue", "red"), main = "Height Comparison")
+```
+
+---
+
+
+  
+### Practical Exercises
+  
+#### Exercise 1: Independent t-Test
+  
+1. Two groups take an exam:
+  
+```{r}
+group_A <- c(78, 80, 85, 88, 90, 92, 95)
+group_B <- c(75, 78, 82, 85, 87, 89, 91)
+```
+
+2. Test if their mean scores are **significantly different**.
+
+
+**Solution:**
+  
+```{r}
+t.test(group_A, group_B)
+```
+
+---
+  
+#### Exercise 2: Checking Assumptions
+  
+1. Use the dataset:
+  
+```{r}
+data_1 <- c(10, 12, 14, 16, 18, 20)
+data_2 <- c(8, 9, 10, 12, 14, 15)
+```
+
+2. Check for **normality** and **equal variances**.
+
+
+**Solution:**
+  
+```{r}
+shapiro.test(data_1)
+shapiro.test(data_2)
+var.test(data_1, data_2)
+```
+
+---
+  
+#### Exercise 3: Paired t-Test
+  
+1. A fitness test is conducted **before and after training**:
+  
+```{r}
+before_fitness <- c(50, 55, 60, 62, 65, 67, 70)
+after_fitness  <- c(55, 58, 63, 65, 68, 70, 73)
+```
+
+2. Test if there is a significant improvement after training.
+
+
+**Solution:**
+  
+```{r}
+t.test(before_fitness, after_fitness, paired = TRUE)
+```
+
+---
+  
+### Exercise 4: Visualizing Group Differences
+  
+1. Create two datasets:
+  
+```{r}
+treatment <- c(100, 110, 120, 130, 140)
+control <- c(95, 105, 115, 125, 135)
+```
+
+2. Plot a **boxplot** to compare the groups.
+
+
+**Solution:**
+  
+```{r}
+# Combine data into dataframe
+data <- data.frame(
+  Score = c(treatment, control),
+  Group = rep(c("Treatment", "Control"), each = 5)
+)
+
+# Plot boxplot
+boxplot(Score ~ Group, data = data, col = c("blue", "red"), main = "Treatment vs. Control")
+```
+
+---
+
+## Performing Pairwise Comparisons Between Group Means
+  
+When comparing more than two groups, **pairwise comparisons** allow us to identify which groups differ significantly.  
+Common methods include:
+  
+  - **t-Tests with adjustments for multiple comparisons**
+  
+  - **Tukey's  Honest Significant Difference (HSD) test**
+  
+  - **Bonferroni correction**
+  
+  - **Dunnett's test (comparing to a control group)**
+  
+
+---
+
+### Understanding Pairwise Comparisons
+When comparing multiple groups, running **multiple t-tests** increases the risk of **Type I errors** (false positives).  
+To correct this, we apply **multiple comparison adjustments** like:
+  
+- **Bonferroni correction** (divides alpha by the number of comparisons)
+
+- **Holm correction** (stepwise adjustment)
+
+- **Tukey’s HSD** (for ANOVA post-hoc comparisons)
+
+
+---
+
+### Performing Pairwise t-Tests
+  
+The `pairwise.t.test()` function performs multiple t-tests while adjusting for multiple comparisons.
+
+#### Example: Comparing Exam Scores Across Three Groups
+
+```{r}
+# Sample data
+group <- rep(c("Group A", "Group B", "Group C"), each = 5)
+scores <- c(85, 88, 90, 92, 94, 78, 80, 83, 85, 87, 70, 72, 75, 77, 79)
+
+### Perform pairwise t-tests with Bonferroni correction
+pairwise.t.test(scores, group, p.adjust.method = "bonferroni")
+```
+
+
+- The output provides **p-values** for each pairwise comparison.
+
+- If **p-value < 0.05**, the groups **significantly differ**.
+
+
+---
+
+### Tukey’s HSD Test
+Tukey’s **Honest Significant Difference (HSD)** test is used after **ANOVA** to compare all groups.
+
+#### Example: Tukey’s HSD Test
+
+```{r}
+# Create dataset
+data <- data.frame(
+  Group = factor(rep(c("A", "B", "C"), each = 5)),
+  Score = c(85, 88, 90, 92, 94, 78, 80, 83, 85, 87, 70, 72, 75, 77, 79)
+)
+
+# Perform ANOVA
+anova_model <- aov(Score ~ Group, data = data)
+
+# Tukey's HSD Test
+TukeyHSD(anova_model)
+```
+
+ 
+- The test provides **confidence intervals** for differences between groups.
+
+- If **p-value < 0.05**, the groups **significantly differ**.
+
+
+---
+  
+### Bonferroni and Holm Corrections
+  
+The **Bonferroni correction** divides alpha (0.05) by the number of comparisons. 
+
+The **Holm correction** adjusts p-values stepwise, maintaining more power.
+
+
+#### Example: Comparing Methods
+
+```{r}
+pairwise.t.test(scores, group, p.adjust.method = "holm")  # Holm
+pairwise.t.test(scores, group, p.adjust.method = "bonferroni")  # Bonferroni
+pairwise.t.test(scores, group, p.adjust.method = "BH")  # Benjamini-Hochberg
+```
+
+
+- **Bonferroni** is more conservative.
+
+- **Holm** maintains statistical power.
+
+- **BH (Benjamini-Hochberg)** controls the false discovery rate.
+
+
+---
+  
+### Dunnett’s Test (Comparing to a Control Group)
+  
+Dunnett’s test compares **all groups against a control group**.
+
+
+#### Example: Comparing Treatment Groups to a Control
+
+```{r}
+# Create dataset
+data <- data.frame(
+  Treatment = factor(rep(c("Control", "Drug A", "Drug B"), each = 5)),
+  Response = c(50, 55, 53, 52, 54, 60, 62, 65, 67, 64, 70, 72, 75, 78, 77)
+)
+
+# Perform ANOVA
+anova_model <- aov(Response ~ Treatment, data = data)
+
+# Perform Dunnett’s test
+library(multcomp)
+summary(glht(anova_model, linfct = mcp(Treatment = "Dunnett")))
+```
+
+
+- Compares **Drug A and Drug B** to the **Control**.
+
+- **p-values** tell if treatments differ from the control.
+
+
+---
+  
+### Practical Exercises
+  
+#### Exercise 1: Perform Pairwise Comparisons
+  
+1. Create three groups of **exam scores**:
+  
+```{r}
+students <- rep(c("Class A", "Class B", "Class C"), each = 6)
+scores <- c(78, 80, 82, 85, 88, 90, 70, 73, 75, 77, 78, 80, 60, 62, 65, 68, 70, 72)
+```
+
+2. Perform **pairwise t-tests** with **Holm correction**.
+
+
+**Solution:**
+  
+```{r}
+pairwise.t.test(scores, students, p.adjust.method = "holm")
+```
+
+---
+  
+#### Exercise 2: Tukey’s HSD Test
+  
+1. Create **three treatment groups**:
+  
+```{r}
+group <- rep(c("Control", "Treatment A", "Treatment B"), each = 5)
+values <- c(10, 12, 15, 13, 14, 18, 20, 22, 21, 23, 25, 27, 30, 29, 31)
+```
+
+2. Perform **ANOVA** and **Tukey’s HSD test**.
+
+
+**Solution:**
+  
+```{r}
+anova_model <- aov(values ~ group)
+TukeyHSD(anova_model)
+```
+
+---
+  
+#### Exercise 3: Comparing to a Control Group
+  
+1. A clinical trial tests three conditions:
+  
+```{r}
+condition <- rep(c("Control", "Low Dose", "High Dose"), each = 6)
+blood_pressure <- c(130, 128, 132, 129, 131, 130, 125, 123, 120, 124, 126, 122, 115, 113, 118, 116, 117, 114)
+```
+
+2. Perform **Dunnett’s test** to compare treatments against the control.
+
+
+**Solution:**
+  
+```{r}
+# Ensure condition is a factor
+condition <- factor(condition)
+anova_model <- aov(blood_pressure ~ condition)
+library(multcomp)
+summary(glht(anova_model, linfct = mcp(condition = "Dunnett")))
+```
+
+---
+
+---
+
+##  <span style="color: green;">**Hands-on Exercise**</span> 
+
+
+### Exercise 1: Descriptive Statistics
+
+1. Create a dataset of **monthly sales revenue**:
+  
+```{r}
+revenue <- c(12000, 13500, 14200, 16000, 17000, 12500, 14000, 15000, 15500, 16500)
+```
+
+2. Compute:
+  
+  - **Mean, median, standard deviation**
+  
+  - **Minimum and maximum values**
+  
+  - **Interquartile range (IQR)**
+  
+  
+**Solution**
+  
+```{r}
+# Compute summary statistics
+summary(revenue)
+
+# Standard deviation
+sd(revenue)
+
+# Interquartile range
+IQR(revenue)
+```
+
+---
+
+  
+### Exercise 2: Confidence Interval for Mean
+  
+1. Use the dataset:
+  
+```{r}
+test_scores <- c(65, 70, 75, 80, 85, 90, 95, 100, 105, 110)
+```
+
+2. Compute a **95% confidence interval** for the mean.
+
+
+**Solution**
+  
+```{r}
+mean_test_scores <- mean(test_scores)
+sd_test_scores <- sd(test_scores)
+n <- length(test_scores)
+
+# Compute confidence interval
+error_margin <- qt(0.975, df=n-1) * (sd_test_scores / sqrt(n))
+c(mean_test_scores - error_margin, mean_test_scores + error_margin)
+```
+
+---
+  
+### Exercise 3: One-Sample t-Test**
+
+1. Use the dataset:
+  
+```{r}
+weights <- c(55, 60, 65, 70, 75, 80, 85, 90, 95, 100)
+```
+
+2. Test if the mean weight is **significantly different from 72**.
+
+**Solution**
+  
+```{r}
+t.test(weights, mu = 72)
+```
+
+---
+  
+### Exercise 4: Proportion Test
+
+1. A survey finds that **65 out of 120** respondents prefer a new product.
+
+2. Test if the proportion is **different from 50%**.
+
+
+**Solution**
+  
+```{r}
+prop.test(65, 120, p = 0.50, correct = FALSE)
+```
+
+---
+  
+### Exercise 5: Comparing Two Sample Means
+
+1. Two classes take a math test:
+  
+```{r}
+class_A <- c(78, 80, 85, 88, 90, 92, 95)
+class_B <- c(75, 78, 82, 85, 87, 89, 91)
+```
+
+2. Test if their mean scores are **significantly different**.
+
+
+**Solution**
+  
+```{r}
+t.test(class_A, class_B)
+```
+
+---
+  
+### Exercise 6: Data Visualization
+
+1. Use the dataset:
+  
+```{r}
+categories <- c("A", "B", "C", "A", "A", "B", "C", "A", "B", "C")
+```
+
+2. Create a **bar chart**.
+
+**Solution**
+  
+```{r}
+category_table <- table(categories)
+barplot(category_table, col = c("blue", "red", "green"), main = "Category Distribution",
+        xlab = "Category", ylab = "Count")
+```
+
+---
+  
+### Exercise 7: Scatterplot with Regression Line
+
+1. Create **two variables**:
+  
+```{r}
+experience <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+salary <- c(40000, 42000, 45000, 47000, 50000, 52000, 55000, 58000, 60000, 63000)
+```
+
+2. Create a **scatterplot with a regression line**.
+
+
+**Solution**
+  
+```{r}
+plot(experience, salary, col = "blue", pch = 19, main = "Experience vs Salary",
+     xlab = "Years of Experience", ylab = "Salary ($)")
+abline(lm(salary ~ experience), col = "red", lwd = 2)
+```
+
+---
+  
+### Exercise 8: Pairwise Comparisons
+
+  
+1. Create a dataset with **three groups**:
+  
+```{r}
+group <- rep(c("Group A", "Group B", "Group C"), each = 5)
+values <- c(85, 88, 90, 92, 94, 78, 80, 83, 85, 87, 70, 72, 75, 77, 79)
+```
+
+2. Perform **pairwise t-tests**.
+
+
+**Solution**
+  
+```{r}
+pairwise.t.test(values, group, p.adjust.method = "holm")
+```
+
+---
+  
+### Exercise 9: Tukey’s HSD Test
+  
+
+1. Use the dataset:
+  
+```{r}
+treatment <- rep(c("Control", "Treatment A", "Treatment B"), each = 5)
+response <- c(50, 55, 53, 52, 54, 60, 62, 65, 67, 64, 70, 72, 75, 78, 77)
+```
+2. Perform **ANOVA** and **Tukey’s HSD test**.
+
+**Solution**
+  
+```{r}
+anova_model <- aov(response ~ treatment)
+TukeyHSD(anova_model)
+```
+
+---
+  
+### Exercise 10: Comparing a Treatment to a Control
+  
+
+1. A clinical trial tests three conditions:
+  
+```{r}
+condition <- rep(c("Control", "Low Dose", "High Dose"), each = 6)
+blood_pressure <- c(130, 128, 132, 129, 131, 130, 125, 123, 120, 124, 126, 122, 115, 113, 118, 116, 117, 114)
+```
+
+2. Perform **Dunnett’s test** to compare treatments against the control.
+
+**Solution**
+  
+```{r}
+# Ensure condition is a factor
+condition <- factor(condition)
+anova_model <- aov(blood_pressure ~ condition)
+library(multcomp)
+summary(glht(anova_model, linfct = mcp(condition = "Dunnett")))
+```
+
+---
+
+---
+
+ 
+
+  
+  
+
+---
+  
+
+---
+ 
+---
+
+---
+<span style="color: brown;">**________________________________________________________________________________**</span>
+ 

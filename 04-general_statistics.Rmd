@@ -1,0 +1,1259 @@
+# General Statistics
+  
+In this course, we will require the ecommerce data set that can be downloaded from [here](https://www.kaggle.com/datasets/shrishtimanja/ecommerce-dataset-for-data-analysis/data). 
+
+
+---
+
+
+
+##  Tabulating Factors and Creating Contingency Tables
+
+This section explores how to handle categorical data using **factors** and **contingency tables** in R. We will learn how to:
+
+
+---
+
+###  Understanding Factors in R
+
+Factors store **categorical variables** efficiently and allow statistical functions to recognize **levels**. 
+
+#### Example: Creating a Factor Variable
+```{r}
+# Creating a categorical variable
+survey_response <- c("Agree", "Disagree", "Neutral", "Agree", "Agree", "Disagree")
+
+# Convert to factor
+survey_factor <- factor(survey_response)
+
+# Print the factor
+print(survey_factor)
+```
+
+
+#### **Example: Reordering Factor Levels**
+```{r}
+survey_factor_ordered <- factor(survey_response, levels = c("Disagree", "Neutral", "Agree"), ordered = TRUE)
+print(survey_factor_ordered)
+```
+
+---
+
+### Creating Frequency Tables
+A **frequency table** counts the number of occurrences of each category.
+
+####  Example: Using `table()` to Create a Frequency Table
+```{r}
+table(survey_factor)
+```
+
+
+
+
+#### **Example: Getting Proportions with `prop.table()`**
+```{r}
+prop.table(table(survey_factor))
+```
+
+
+
+
+---
+
+### Creating Contingency Tables
+A **contingency table** (cross-tabulation) is used to summarize two categorical variables.
+
+#### Example: 2-Way Contingency Table
+```{r}
+# Sample data
+gender <- c("Male", "Female", "Female", "Male", "Male", "Female")
+
+# Creating a contingency table
+contingency_table <- table(gender, survey_factor)
+
+# Display the table
+print(contingency_table)
+```
+
+
+
+
+---
+
+### 4.2.4 Adding Margins to Contingency Tables
+We can add row and column totals using `addmargins()`.
+
+#### Example: Adding Margins
+```{r}
+addmargins(contingency_table)
+```
+
+
+
+
+---
+
+### 4.2.5 Computing Row and Column Proportions
+#### Example: Row Proportions
+```{r}
+prop.table(contingency_table, margin = 1)
+```
+
+#### Example: Column Proportions
+```{r}
+prop.table(contingency_table, margin = 2)
+```
+
+---
+
+### Visualizing Contingency Tables
+#### Example: Bar Plot
+```{r}
+barplot(contingency_table, beside = TRUE, legend = TRUE, col = c("blue", "red"))
+```
+
+#### Example: Mosaic Plot
+```{r}
+mosaicplot(contingency_table, main = "Survey Responses by Gender", col = c("skyblue", "pink"))
+```
+
+---
+
+### Practical Exercises
+#### Exercise 1: Working with Factors
+ 
+1. Create a factor variable from the following data:  
+```{r}
+   education <- c("High School", "College", "College", "PhD", "Masters", "High School")
+```
+2. Convert it into an **ordered factor** with levels: `"High School" < "College" < "Masters" < "PhD"`  
+3. Print the ordered factor.
+
+**Solution:**
+```{r}
+education_factor <- factor(education, levels = c("High School", "College", "Masters", "PhD"), ordered = TRUE)
+print(education_factor)
+```
+
+---
+
+#### Exercise 2: Creating a Contingency Table
+1. Create two categorical variables:  
+```{r}
+   department <- c("Sales", "HR", "IT", "Sales", "HR", "IT", "Sales", "IT")
+   status <- c("Full-Time", "Part-Time", "Full-Time", "Part-Time", "Full-Time", "Full-Time", "Part-Time", "Full-Time")
+```
+2. Generate a contingency table.
+3. Compute **row and column proportions**.
+4. Add **margins** to the table.
+
+**Solution:**
+```{r}
+# Creating a contingency table
+dept_table <- table(department, status)
+
+# Display the table
+print(dept_table)
+
+# Row proportions
+prop.table(dept_table, margin = 1)
+
+# Column proportions
+prop.table(dept_table, margin = 2)
+
+# Adding margins
+addmargins(dept_table)
+```
+
+---
+
+#### Exercise 3: Titanic Dataset Analysis
+Use the built-in **Titanic dataset** to:
+
+1. Create a **contingency table** of **passenger class (`Pclass`)** and **survival (`Survived`)**.
+
+2. Compute row and column proportions.
+
+3. Create a bar plot.
+
+
+**Solution:**
+```{r}
+# Load required packages
+library(dplyr)
+library(tidyr)
+
+# Load Titanic dataset
+data(Titanic)
+
+# Convert to a proper dataframe and expand the frequency count
+Titanic_df <- as.data.frame(Titanic) %>%
+  uncount(Freq)  # Expands rows based on the frequency column
+
+# Check the structure of the dataframe
+str(Titanic_df)
+
+# Create a contingency table using the correct column names
+titanic_table <- table(Titanic_df$Class, Titanic_df$Survived)
+
+# Print the table
+print(titanic_table)
+```
+
+---
+
+  
+## Calculating Quantiles
+  
+Quantiles are statistical measures that **divide a dataset into equal parts**. They help summarize distributions, identify outliers, and assess skewness.
+
+
+  
+### Understanding Quantiles
+  Quantiles divide data into **equal-sized groups**:
+  
+  - **Median (50th percentile)**: The middle value of a dataset.
+  
+- **Quartiles (25th, 50th, 75th percentiles)**: Divide data into four equal parts.
+
+- **Deciles (10th, 20th, ..., 90th percentiles)**: Divide data into ten equal parts.
+
+- **Percentiles (1st, 2nd, ..., 99th percentiles)**: Divide data into 100 equal parts.
+
+
+
+  
+### Computing Quantiles in R
+#### Example: Finding Quartiles
+```{r}
+# Create a dataset
+data <- c(3, 7, 8, 5, 12, 14, 21, 13, 18)
+
+### Compute quartiles
+quantile(data)
+```
+
+- **25% (Q1)**: First quartile
+- **50% (Q2)**: Median
+- **75% (Q3)**: Third quartile
+- **100%**: Maximum value
+
+---
+  
+### Computing Specific Quantiles
+#### Example: Finding the 10th and 90th Percentiles
+```{r}
+quantile(data, probs = c(0.10, 0.90))
+```
+
+
+
+---
+  
+### Using `summary()` for Quick Insights
+```{r}
+summary(data)
+```
+
+
+The **summary()** function provides:
+
+- **Min**: Minimum value
+  
+- **1st Qu. (Q1, 25%)**: First quartile
+
+- **Median (Q2, 50%)**: Second quartile
+
+- **Mean**: Average value
+
+- **3rd Qu. (Q3, 75%)**: Third quartile
+
+- **Max**: Maximum value
+
+
+---
+  
+###  Visualizing Quantiles
+#### Example: Boxplot to Show Quartiles
+```{r}
+boxplot(data, main = "Boxplot of Data", col = "lightblue")
+```
+In a boxplot:
+
+  - **The median (Q2) as a thick line in the box**
+  
+  - **The interquartile range (IQR, Q1 to Q3) as the box**
+  
+  - **Outliers as individual points**
+  
+  
+  ---
+  
+### Finding Interquartile Range (IQR)
+  The **IQR** measures **the spread of the middle 50% of the data**:
+```{r}
+IQR(data)
+```
+OR manually:
+```{r}
+iqr_value <- quantile(data, 0.75) - quantile(data, 0.25)
+print(iqr_value)
+```
+
+---
+  
+###  Finding Outliers Using IQR
+  Outliers are **values outside** `Q1 - 1.5*IQR` and `Q3 + 1.5*IQR`.
+
+#### Example: Detecting Outliers
+```{r}
+# Compute quartiles
+q1 <- quantile(data, 0.25)
+q3 <- quantile(data, 0.75)
+iqr_value <- IQR(data)
+
+# Define outlier thresholds
+lower_bound <- q1 - 1.5 * iqr_value
+upper_bound <- q3 + 1.5 * iqr_value
+
+# Find outliers
+outliers <- data[data < lower_bound | data > upper_bound]
+print(outliers)
+```
+
+---
+  
+### 4.3.8 Hands-on Exercises
+#### Exercise 1: Computing Quartiles
+  1. Create a dataset:  
+  
+  
+```{r}
+scores <- c(55, 78, 85, 90, 92, 60, 73, 81, 95, 88)
+```
+2. Compute **Q1, Q2 (median), and Q3**.
+3. Calculate the **IQR**.
+4. Plot a **boxplot**.
+
+**Solution:**
+```{r}
+quantile(scores)
+IQR(scores)
+boxplot(scores, main = "Exam Scores", col = "lightblue")
+```
+
+---
+  
+#### Exercise 2: Computing Custom Quantiles
+  1. Use the dataset:  
+  
+```{r}
+heights <- c(150, 160, 165, 170, 175, 180, 185, 190, 195, 200)
+```
+2. Find the **5th, 25th, 50th, 75th, and 95th percentiles**.
+
+**Solution:**
+  
+```{r}
+quantile(heights, probs = c(0.05, 0.25, 0.50, 0.75, 0.95))
+```
+
+---
+  
+#### Exercise 3: Finding Outliers
+  1. Use the dataset:  
+  
+```{r}
+salaries <- c(40000, 42000, 45000, 47000, 50000, 52000, 55000, 58000, 60000, 100000)
+```
+2. Compute **Q1, Q3, and IQR**.
+3. Identify **outliers**.
+
+**Solution:**
+  
+```{r}
+q1 <- quantile(salaries, 0.25)
+q3 <- quantile(salaries, 0.75)
+iqr_value <- IQR(salaries)
+
+lower_bound <- q1 - 1.5 * iqr_value
+upper_bound <- q3 + 1.5 * iqr_value
+
+outliers <- salaries[salaries < lower_bound | salaries > upper_bound]
+print(outliers)
+```
+
+---
+  
+
+---
+  
+
+  
+## 4.4 z-Scores
+  
+The **z-score** (also called the **standard score**) tells us how many standard deviations a data point is from the **mean**. It is a useful measure for comparing values across different distributions and detecting **outliers**.
+
+  
+### 4.4.1 Understanding z-Scores
+  The **z-score formula** is:
+
+  \[
+    z = \frac{x - \mu}{\sigma}
+    \]
+
+Where:
+  
+  - \( x \) = data point
+
+- \( \mu \) = mean of the dataset
+
+- \( \sigma \) = standard deviation of the dataset
+
+
+**Interpretation:**
+
+  - \( z = 0 \) → The value is **equal** to the mean.
+
+- \( z > 0 \) → The value is **above** the mean.
+
+- \( z < 0 \) → The value is **below** the mean.
+
+- \( |z| > 2 \) → The value is **unusual**.
+
+- \( |z| > 3 \) → The value is **potentially an outlier**.
+
+
+---
+  
+### 4.4.2 Computing z-Scores in R
+#### Example: Computing z-Scores Manually
+  
+```{r}
+# Sample data
+data <- c(50, 55, 60, 65, 70, 75, 80, 85, 90, 95)
+
+# Compute mean and standard deviation
+mean_value <- mean(data)
+sd_value <- sd(data)
+
+# Compute z-scores
+z_scores <- (data - mean_value) / sd_value
+print(z_scores)
+```
+
+---
+  
+### Computing z-Scores Using `scale()`
+The `scale()` function standardizes a dataset (converts it into z-scores):
+  
+```{r}
+# Compute z-scores using scale()
+z_scaled <- scale(data)
+print(z_scaled)
+```
+
+The `scale()` function **automatically** centers and scales the data.
+
+---
+  
+### 4.4.4 Interpreting z-Scores
+Let's compute the **z-score of 80** from our dataset:
+
+```{r}
+z_80 <- (80 - mean_value) / sd_value
+print(z_80)
+```
+
+If **\( z = 0.5 \)**, this means **80 is 0.5 standard deviations above the mean**.
+
+---
+
+### 4.4.5 Using z-Scores to Detect Outliers
+
+Outliers are values that have **\( |z| > 3 \)**.
+
+#### Example: Finding Outliers
+
+```{r}
+# Identify values with |z| > 3
+outliers <- data[abs(z_scores) > 3]
+print(outliers)
+```
+
+---
+
+### 4.4.6 Visualizing z-Scores
+#### Example: Histogram of z-Scores
+
+```{r}
+hist(z_scores, main = "Histogram of z-Scores", col = "skyblue", xlab = "z-Scores")
+abline(v = c(-3, 3), col = "red", lwd = 2) # Marking outlier thresholds
+```
+
+#### Example: Standard Normal Curve with z-Scores
+```{r}
+x <- seq(-4, 4, length=100)
+y <- dnorm(x)
+
+plot(x, y, type="l", lwd=2, col="blue", main="Standard Normal Distribution")
+abline(v = c(-3, -2, -1, 0, 1, 2, 3), col="red", lty=2) # Mark z-scores
+```
+
+---
+
+### Hands-on Exercises
+#### Exercise 1: Compute z-Scores
+
+1. Use the dataset: 
+
+```{r}
+   heights <- c(150, 160, 165, 170, 175, 180, 185, 190, 195, 200)
+```
+2. Compute the **mean** and **standard deviation**.
+
+3. Calculate the **z-scores**.
+
+4. Find any **outliers** (\( |z| > 3 \)).
+
+
+**Solution:**
+```{r}
+mean_height <- mean(heights)
+sd_height <- sd(heights)
+z_scores <- (heights - mean_height) / sd_height
+outliers <- heights[abs(z_scores) > 3]
+print(z_scores)
+print(outliers)
+```
+
+---
+
+#### Exercise 2: Standardize Data Using `scale()`
+
+1. Use the dataset:  
+
+```{r}
+   weights <- c(55, 60, 65, 70, 75, 80, 85, 90, 95, 100)
+```
+2. Standardize the data using `scale()`.
+
+3. Plot a **histogram** of the z-scores.
+
+
+**Solution:**
+```{r}
+z_weights <- scale(weights)
+hist(z_weights, main = "Histogram of Standardized Weights", col = "lightgreen")
+```
+
+---
+
+#### Exercise 3: Identifying Outliers
+
+1. Use the dataset:  
+
+```{r}
+   salaries <- c(40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 200000)
+```
+   
+2. Compute **z-scores**.
+
+3. Identify **outliers**.
+
+
+**Solution:**
+```{r}
+mean_salary <- mean(salaries)
+sd_salary <- sd(salaries)
+z_salaries <- (salaries - mean_salary) / sd_salary
+outliers <- salaries[abs(z_salaries) > 3]
+print(outliers)
+```
+
+---
+
+## Inferential Statistics
+  
+  **Inferential statistics** allows us to **make conclusions** about a population based on a **sample**. 
+  
+
+### Basic Concepts
+#### Population vs. Sample
+  
+- **Population**: The entire group we want to study.
+  
+- **Sample**: A subset of the population used for analysis.
+  
+
+#### Parameter vs. Statistic
+  
+- **Parameter**: A value that describes the population.
+  
+- **Statistic**: A value computed from a sample.
+  
+
+#### Common Inferential Techniques
+  
+1. **Confidence Intervals** – Estimating population values.
+
+2. **Hypothesis Testing** – Testing claims about populations.
+
+
+---
+  
+###  Confidence Intervals
+  
+A **confidence interval (CI)** gives a range where we expect a population parameter to lie.
+
+#### Example: Confidence Interval for a Mean
+
+```{r}
+# Sample data
+data <- c(50, 55, 60, 65, 70, 75, 80, 85, 90, 95)
+
+# Mean and standard deviation
+mean_data <- mean(data)
+sd_data <- sd(data)
+n <- length(data)
+
+# Compute confidence interval (95% confidence)
+error_margin <- qt(0.975, df=n-1) * (sd_data / sqrt(n))
+lower_bound <- mean_data - error_margin
+upper_bound <- mean_data + error_margin
+
+# Print confidence interval
+c(lower_bound, upper_bound)
+```
+
+
+  We are **95% confident** that the population mean lies within this range.
+
+---
+  
+### Hypothesis Testing
+  
+Hypothesis testing helps us determine whether a **claim about a population** is supported by sample data.
+
+### Steps in Hypothesis Testing
+
+1. **State the null (\(H_0\)) and alternative (\(H_A\)) hypotheses.**
+  
+2. **Select a significance level (\(\alpha\)).**
+  
+3. **Compute the test statistic.**
+  
+4. **Compare the test statistic to a critical value or p-value.**
+  
+5. **Make a conclusion.**
+
+  
+---
+  
+### One-Sample t-Test
+  
+Tests if the sample mean is different from a known population mean.
+
+#### Example: Testing If a Sample Mean Differs from 70
+
+```{r}
+# Sample data
+sample_data <- c(65, 68, 72, 75, 70, 66, 71, 69, 74, 67)
+
+# One-sample t-test (H0: Mean = 70)
+
+t.test(sample_data, mu = 70)
+```
+
+
+- If **p-value < 0.05**, reject \(H_0\).
+
+- If **p-value > 0.05**, fail to reject \(H_0\).
+
+
+---
+  
+###  Comparing Two Sample Means
+A **two-sample t-test** compares the means of **two independent groups**.
+
+#### Example: Comparing Male vs. Female Heights
+
+```{r}
+# Sample data
+male_heights <- c(170, 175, 180, 185, 190, 195)
+female_heights <- c(160, 165, 168, 170, 175, 178)
+
+# Two-sample t-test
+t.test(male_heights, female_heights)
+```
+
+
+- If **p-value < 0.05**, the means are **significantly different**.
+
+- If **p-value > 0.05**, the means are **not significantly different**.
+
+
+---
+  
+### Testing Proportions
+  
+A **proportion test** is used for categorical data.
+
+#### Example: Testing if 60% of People Prefer Brand A
+
+```{r}
+# Sample data: 55 people prefer Brand A out of 100
+prop.test(55, 100, p = 0.60)
+```
+
+
+- If **p-value < 0.05**, reject \(H_0\).
+
+- If **p-value > 0.05**, fail to reject \(H_0\).
+
+
+---
+  
+### 4.5.7 Practical Exercises
+  
+#### Exercise 1: Confidence Interval for Population Mean
+  
+1. Use the dataset:
+  
+```{r}
+weights <- c(55, 60, 65, 70, 75, 80, 85, 90, 95, 100)
+```
+
+2. Compute a **95% confidence interval** for the population mean.
+
+
+**Solution:**
+  
+```{r}
+mean_weights <- mean(weights)
+sd_weights <- sd(weights)
+n_weights <- length(weights)
+
+# Compute CI
+error_margin <- qt(0.975, df=n_weights-1) * (sd_weights / sqrt(n_weights))
+c(mean_weights - error_margin, mean_weights + error_margin)
+```
+
+---
+  
+#### Exercise 2: Hypothesis Test for a Mean
+  
+1. Use the dataset:
+  
+```{r}
+test_scores <- c(78, 82, 85, 90, 88, 79, 84, 87, 92, 81)
+```
+
+2. Test whether the mean test score is **greater than 80**.
+
+
+**Solution:**
+  
+```{r}
+t.test(test_scores, mu = 80, alternative = "greater")
+```
+
+---
+  
+#### Exercise 3: Comparing Two Sample Means
+  
+  
+1. Create two samples:
+  
+```{r}
+group_A <- c(15, 18, 20, 22, 25, 27, 30)
+group_B <- c(17, 19, 21, 24, 26, 28, 32)
+```
+
+2. Perform a **two-sample t-test**.
+
+
+**Solution:**
+```{r}
+t.test(group_A, group_B)
+```
+
+---
+  
+#### Exercise 4: Testing a Sample Proportion
+  
+1. Suppose **45 out of 100 people** prefer Product X.
+
+2. Test if the true proportion is **different from 50%**.
+
+
+**Solution:**
+  
+```{r}
+prop.test(45, 100, p = 0.50)
+```
+
+---
+  
+
+---
+
+
+---
+
+
+## Testing the Mean of a Sample (t-Test) and its Confidence Interval
+  
+A **t-test** is used to test whether the mean of a sample is **significantly different** from a hypothesized population mean. It helps answer questions like:
+
+- "Is the average test score significantly different from 70?"
+
+- "Does the sample data suggest a real effect, or is it due to random chance?"
+
+
+---
+  
+### Understanding the t-Test
+  
+The **one-sample t-test** formula:
+  
+  
+  \[
+    t = \frac{\bar{x} - \mu}{s / \sqrt{n}}
+    \]
+
+Where:
+  
+- \( \bar{x} \) = sample mean
+
+- \( \mu \) = population mean
+
+- \( s \) = sample standard deviation
+
+- \( n \) = sample size
+
+
+#### Key Assumptions:
+
+- The data is **normally distributed** (or \( n > 30 \)).
+
+- The sample is **randomly selected**.
+
+- The standard deviation is **unknown** (if known, use a **z-test** instead).
+
+
+---
+  
+### Computing Confidence Intervals for the Mean
+  
+A **confidence interval (CI)** provides a range where the true population mean is expected to lie.
+
+#### Example: 95% Confidence Interval for a Sample Mean
+
+```{r}
+# Sample data
+data <- c(55, 60, 65, 70, 75, 80, 85, 90, 95, 100)
+
+# Compute mean, standard deviation, and sample size
+mean_data <- mean(data)
+sd_data <- sd(data)
+n <- length(data)
+
+# Compute confidence interval (95% confidence level)
+error_margin <- qt(0.975, df=n-1) * (sd_data / sqrt(n))
+lower_bound <- mean_data - error_margin
+upper_bound <- mean_data + error_margin
+
+# Print confidence interval
+c(lower_bound, upper_bound)
+```
+
+
+We are **95% confident** that the population mean lies within this range.
+
+---
+  
+### Performing a One-Sample t-Test
+  
+A **one-sample t-test** checks whether the sample mean is significantly different from a given value.
+
+#### Example: Testing if the Mean is Different from 70
+
+```{r}
+# Sample data
+sample_data <- c(65, 68, 72, 75, 70, 66, 71, 69, 74, 67)
+
+# Perform one-sample t-test
+t.test(sample_data, mu = 70)
+```
+
+- If **p-value < 0.05**, reject \(H_0\) → The mean is **significantly different** from 70.
+
+- If **p-value > 0.05**, fail to reject \(H_0\) → No significant difference.
+
+
+---
+  
+###  One-Sided vs. Two-Sided Tests
+  
+By default, `t.test()` performs a **two-sided test** (\( H_A: \mu \neq 70 \)).
+
+
+If we want to test whether the mean is **greater than** or **less than** a value:
+  
+  
+#### Example: Testing if Mean is Greater Than 70
+  
+```{r}
+t.test(sample_data, mu = 70, alternative = "greater")
+```
+
+#### Example: Testing if Mean is Less Than 70
+
+```{r}
+t.test(sample_data, mu = 70, alternative = "less")
+```
+
+---
+  
+### Comparing Two Sample Means (Independent t-Test)
+  
+A **two-sample t-test** checks if two groups have significantly different means.
+
+
+#### Example: Comparing Male vs. Female Heights
+
+```{r}
+# Sample data
+male_heights <- c(170, 175, 180, 185, 190, 195)
+female_heights <- c(160, 165, 168, 170, 175, 178)
+
+# Perform independent t-test
+t.test(male_heights, female_heights)
+```
+
+---
+  
+### Paired t-Test (Dependent Samples)
+  
+A **paired t-test** compares **before and after** measurements.
+
+#### Example: Testing Before vs. After Training Scores
+
+```{r}
+# Scores before and after training
+before <- c(60, 65, 70, 75, 80, 85, 90)
+after  <- c(65, 68, 75, 78, 85, 88, 92)
+
+# Perform paired t-test
+t.test(before, after, paired = TRUE)
+```
+
+---
+  
+### Practical Exercises
+  
+#### Exercise 1: Compute a Confidence Interval
+  
+1. Use the dataset:
+  
+```{r}
+scores <- c(78, 82, 85, 90, 88, 79, 84, 87, 92, 81)
+```
+
+2. Compute a **95% confidence interval** for the mean.
+
+
+**Solution:**
+  
+```{r}
+mean_scores <- mean(scores)
+sd_scores <- sd(scores)
+n_scores <- length(scores)
+
+# Compute CI
+error_margin <- qt(0.975, df=n_scores-1) * (sd_scores / sqrt(n_scores))
+c(mean_scores - error_margin, mean_scores + error_margin)
+```
+
+---
+  
+#### Exercise 2: One-Sample t-Test
+  
+1. Use the dataset:
+  
+```{r}
+weights <- c(55, 60, 65, 70, 75, 80, 85, 90, 95, 100)
+```
+
+2. Test whether the mean is **different from 72**.
+
+
+**Solution:**
+  
+```{r}
+t.test(weights, mu = 72)
+```
+
+---
+  
+#### Exercise 3: Comparing Two Groups
+  
+1. Use the dataset:
+  
+```{r}
+group_A <- c(15, 18, 20, 22, 25, 27, 30)
+group_B <- c(17, 19, 21, 24, 26, 28, 32)
+```
+
+2. Perform an **independent two-sample t-test**.
+
+
+**Solution:**
+  
+```{r}
+t.test(group_A, group_B)
+```
+
+---
+  
+#### Exercise 4: Paired t-Test
+  
+1. A study measures reaction time **before and after caffeine consumption**:
+  
+```{r}
+before_caffeine <- c(300, 320, 310, 305, 315, 290, 295)
+after_caffeine  <- c(280, 300, 290, 285, 295, 275, 280)
+```
+
+2. Perform a **paired t-test** to determine if caffeine affects reaction time.
+
+
+**Solution:**
+  
+```{r}
+t.test(before_caffeine, after_caffeine, paired = TRUE)
+```
+
+---
+  
+## 4.7 Testing a Sample Proportion and its Confidence Interval
+
+A **proportion test** is used when we want to **make inferences about categorical data**. This test helps us:
+  
+- Estimate the **proportion of a population** with a certain characteristic.
+
+- Determine whether a sample proportion **differs significantly** from a hypothesized value.
+
+
+---
+  
+### Understanding Proportion Testing
+  
+A **sample proportion** is calculated as:
+  
+  \[
+    \hat{p} = \frac{x}{n}
+    \]
+
+Where:
+  
+  
+- \( x \) = Number of successes (e.g., people who answered "Yes")
+
+- \( n \) = Total number of observations
+
+
+The **confidence interval (CI)** for a proportion is given by:
+  
+  \[
+    \hat{p} \pm Z \times \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
+    \]
+
+Where:
+  
+- \( Z \) = Critical value for the confidence level (e.g., 1.96 for 95%)
+
+- \( \hat{p} \) = Sample proportion
+
+- \( n \) = Sample size
+
+
+---
+  
+### Computing Confidence Intervals for Proportions
+  
+We can calculate **confidence intervals** for proportions using `prop.test()`.
+
+#### Example: 95% Confidence Interval for Proportion
+Suppose **60 out of 100** people **prefer Brand A**.
+
+```{r}
+# Number of successes (people preferring Brand A)
+x <- 60
+# Total sample size
+n <- 100
+
+# Compute confidence interval
+prop.test(x, n, conf.level = 0.95, correct = FALSE)
+```
+
+We are **95% confident** that the true proportion of people who prefer Brand A falls within the computed confidence interval.
+
+---
+  
+### Performing a One-Sample Proportion Test
+  
+We test whether a sample proportion is significantly different from a hypothesized proportion \( p_0 \).
+
+#### Example: Testing if 60% Prefer Brand A
+
+We test:
+
+  
+  \[
+    H_0: p = 0.60
+    \]
+
+
+\[
+  H_A: p \neq 0.60
+  \]
+
+
+```{r}
+prop.test(x, n, p = 0.60, correct = FALSE)
+```
+
+
+  
+- If **p-value < 0.05**, reject \( H_0 \) → The sample proportion is **significantly different** from 60%.
+
+- If **p-value > 0.05**, fail to reject \( H_0 \) → No significant difference.
+
+
+---
+  
+### One-Sided Proportion Tests
+  
+If we want to test if the proportion is **greater than** or **less than** a given value:
+  
+  
+#### Example: Testing if Proportion is Greater Than 50%
+  
+```{r}
+prop.test(x, n, p = 0.50, alternative = "greater", correct = FALSE)
+```
+
+#### Example: Testing if Proportion is Less Than 70%
+
+```{r}
+prop.test(x, n, p = 0.70, alternative = "less", correct = FALSE)
+```
+
+---
+  
+### Comparing Two Sample Proportions
+We can compare **two proportions** to determine if they are significantly different.
+
+#### Example: Comparing Success Rates of Two Groups
+
+- **Group 1:** 30 successes out of 50
+
+- **Group 2:** 45 successes out of 80
+
+
+```{r}
+prop.test(c(30, 45), c(50, 80), correct = FALSE)
+```
+
+
+- If **p-value < 0.05**, the two proportions are **significantly different**.
+
+- If **p-value > 0.05**, no significant difference.
+
+
+---
+  
+### Visualizing Proportions
+  
+#### Example: Bar Plot of Proportions
+  
+```{r}
+successes <- c(30, 45)
+total <- c(50, 80)
+proportions <- successes / total
+
+barplot(proportions, names.arg = c("Group 1", "Group 2"), col = c("blue", "red"),
+        main = "Comparison of Two Proportions", ylim = c(0, 1), ylab = "Proportion")
+```
+
+---
+  
+### Practical Exercises
+#### Exercise 1: Compute a Confidence Interval
+  
+1. A survey shows that **150 out of 500** people support a new policy.
+
+2. Compute a **95% confidence interval** for the proportion.
+
+
+**Solution:**
+```{r}
+prop.test(150, 500, conf.level = 0.95, correct = FALSE)
+```
+
+---
+  
+#### Exercise 2: One-Sample Proportion Test
+  
+1. A sample of **200 students** finds that **140 prefer online learning**.
+
+2. Test if the proportion is **different from 65%**.
+
+
+**Solution:**
+```{r}
+prop.test(140, 200, p = 0.65, correct = FALSE)
+```
+
+---
+  
+#### Exercise 3: One-Sided Proportion Test
+  
+1. In a company, **45 out of 100 employees** prefer remote work.
+
+2. Test if the proportion is **greater than 40%**.
+
+
+**Solution:**
+```{r}
+prop.test(45, 100, p = 0.40, alternative = "greater", correct = FALSE)
+```
+
+---
+  
+#### Exercise 4: Comparing Two Proportions
+  
+1. Two groups were surveyed:
+  
+- **Group A:** 85 out of 150 prefer a new product.
+
+- **Group B:** 75 out of 130 prefer the new product.
+
+2. Test whether the proportions are significantly different.
+
+
+**Solution:**
+```{r}
+prop.test(c(85, 75), c(150, 130), correct = FALSE)
+```
+
+---
+  
+
+
+---
+
+
+---

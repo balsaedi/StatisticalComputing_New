@@ -79,7 +79,7 @@ print(contingency_table)
 
 ---
 
-### 4.2.4 Adding Margins to Contingency Tables
+### Adding Margins to Contingency Tables
 We can add row and column totals using `addmargins()`.
 
 #### Example: Adding Margins
@@ -92,7 +92,7 @@ addmargins(contingency_table)
 
 ---
 
-### 4.2.5 Computing Row and Column Proportions
+### Computing Row and Column Proportions
 #### Example: Row Proportions
 ```{r}
 prop.table(contingency_table, margin = 1)
@@ -322,7 +322,7 @@ print(outliers)
 
 ---
   
-### 4.3.8 Hands-on Exercises
+### Hands-on Exercises
 #### Exercise 1: Computing Quartiles
   1. Create a dataset:  
   
@@ -389,12 +389,12 @@ print(outliers)
   
 
   
-## 4.4 z-Scores
+##  z-Scores
   
 The **z-score** (also called the **standard score**) tells us how many standard deviations a data point is from the **mean**. It is a useful measure for comparing values across different distributions and detecting **outliers**.
 
   
-### 4.4.1 Understanding z-Scores
+###  Understanding z-Scores
   The **z-score formula** is:
 
   \[
@@ -425,7 +425,7 @@ Where:
 
 ---
   
-### 4.4.2 Computing z-Scores in R
+###  Computing z-Scores in R
 #### Example: Computing z-Scores Manually
   
 ```{r}
@@ -456,7 +456,7 @@ The `scale()` function **automatically** centers and scales the data.
 
 ---
   
-### 4.4.4 Interpreting z-Scores
+###  Interpreting z-Scores
 Let's compute the **z-score of 80** from our dataset:
 
 ```{r}
@@ -468,7 +468,7 @@ If **\( z = 0.5 \)**, this means **80 is 0.5 standard deviations above the mean*
 
 ---
 
-### 4.4.5 Using z-Scores to Detect Outliers
+###  Using z-Scores to Detect Outliers
 
 Outliers are values that have **\( |z| > 3 \)**.
 
@@ -482,7 +482,7 @@ print(outliers)
 
 ---
 
-### 4.4.6 Visualizing z-Scores
+###  Visualizing z-Scores
 #### Example: Histogram of z-Scores
 
 ```{r}
@@ -713,7 +713,7 @@ prop.test(55, 100, p = 0.60)
 
 ---
   
-### 4.5.7 Practical Exercises
+### Practical Exercises
   
 #### Exercise 1: Confidence Interval for Population Mean
   
@@ -1253,6 +1253,7 @@ prop.test(c(85, 75), c(150, 130), correct = FALSE)
 
 
 ---
+
 ##  Comparing the Means of Two Samples
   
 Comparing the means of two independent samples is essential in determining if there is a significant difference between two groups. 

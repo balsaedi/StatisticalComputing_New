@@ -131,6 +131,7 @@ exercise-1-compute-a-confidence-interval-1
 exercise-2-one-sample-proportion-test
 exercise-3-one-sided-proportion-test
 exercise-4-comparing-two-proportions
+comparing-the-means-of-two-samples
 understanding-two-sample-t-test
 independent-unpaired-t-test
 example-comparing-heights-of-males-and-females
